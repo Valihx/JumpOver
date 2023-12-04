@@ -1,4 +1,3 @@
-// Import necessary classes and resources
 import Game from '../engine/game.js';
 //import Player from './player.js';
 //import PlayerUI from './playerUI.js';
@@ -15,11 +14,10 @@ class Level extends Game {
     
     this.addGameObject(new PlayerUI(10, 10));
 */
-
-    // Define the platform's width and the gap between platforms
     const platformWidth = 1000;
 
     new Platform(0, this.canvas.height - 20, platformWidth, 20),
     addGameObject(platform);
     
+}
 }
