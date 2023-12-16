@@ -18,7 +18,7 @@ class Player extends GameObject {
     this.score = 0;
     this.isOnPlatform = false;
     this.isJumping = false;
-    this.jumpForce = 500;
+    this.jumpForce = 400;
     this.jumpTime = 0.01;
     this.jumpTimer = 0;
     this.isGamepadMovement = false;
@@ -73,11 +73,7 @@ class Player extends GameObject {
         }
       }
     }
-  
-    // Check if player has fallen off the bottom of the screen
-    if (this.y > this.game.canvas.height) {
-      this.resetPlayerState();
-    }
+
 
     super.update(deltaTime);
   }
@@ -142,8 +138,6 @@ class Player extends GameObject {
 
   resetPlayerState() {
     const platformHeight = 50; // Replace with your platform's height
-    //this.x = 0; // For left corner
-     this.x = this.game.canvas.width - this.width; // For right corner
     this.y = this.game.canvas.height - platformHeight - this.height;
     this.getComponent(Physics).velocity = { x: 0, y: 0 };
     this.getComponent(Physics).acceleration = { x: 0, y: 0 };
