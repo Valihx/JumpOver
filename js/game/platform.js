@@ -21,10 +21,8 @@ class Platform extends GameObject {
     // Since platforms don't move, these values will remain zero throughout the game
     this.addComponent(new Physics({ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }));
     
-    // Set the tag property to 'platform'. This can be used to identify platforms later in the game logic
     this.tag = 'platform'; 
   }
 }
 
-// Export the Platform class as the default export of this module
 export default Platform;

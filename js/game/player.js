@@ -18,19 +18,48 @@ class Player extends GameObject {
     this.score = 0;
     this.isOnPlatform = false;
     this.isJumping = false;
-    this.jumpForce = 400;
-    this.jumpTime = 0.01;
+    this.jumpForce = 550;
+    this.jumpTime = 0.007;
     this.jumpTimer = 0;
     this.isGamepadMovement = false;
     this.isGamepadJump = false;
+    this.isgamepadDash = false;
+    this.isDashing = false;
+    this.dashSpeed = 750;
+    this.dashDuration = 0.5;
+    this.dashTimer = 0;
+    this.canDash = true; 
+    this.fastFallSpeed = 65; 
+    this.walkSpeed = 200; // Adjust this value as needed
+
   }
 
-  // The update function runs every frame and contains game logic
   update(deltaTime) {
-    const physics = this.getComponent(Physics); // Get physics component
-    const input = this.getComponent(Input); // Get input component
+    const physics = this.getComponent(Physics); 
+    const input = this.getComponent(Input); 
 
     this.handleGamepadInput(input);
+    // Handle player dashing
+    if (this.isDashing && this.canDash) { 
+      this.dashTimer -= deltaTime;
+      if (this.dashTimer <= 0) {
+        this.isDashing = false;
+        this.isGamepadDash = false;
+        this.dashTimer = this.dashDuration;
+        this.canDash = false; // Player can't dash again until they touch the ground
+      }
+    }
+    if (this.isOnPlatform) {
+      this.canDash = true; // Player can dash again
+    }
+
+    if (this.isDashing) {
+      physics.velocity.x = this.direction * this.dashSpeed;
+      this.dashTimer -= deltaTime;
+      if (this.dashTimer <= 0) {
+        this.isDashing = false;
+      }
+    } else {
     
     // Handle player movement
     if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
@@ -42,6 +71,7 @@ class Player extends GameObject {
     } else if (!this.isGamepadMovement) {
       physics.velocity.x = 0;
     }
+  }
 
     // Handle player jumping
     if (!this.isGamepadJump && input.isKeyDown('ArrowUp') && this.isOnPlatform) {
@@ -91,13 +121,13 @@ class Player extends GameObject {
       // Move right
       if (horizontalAxis > 0.1) {
         this.isGamepadMovement = true;
-        physics.velocity.x = 100;
+        physics.velocity.x = 300;
         this.direction = 1; // Change direction to 1
       } 
       // Move left
       else if (horizontalAxis < -0.1) {
         this.isGamepadMovement = true;
-        physics.velocity.x = -100;
+        physics.velocity.x = -300;
         this.direction = -1; // Change direction to -1
       } 
       else {
@@ -106,6 +136,15 @@ class Player extends GameObject {
       if (input.isGamepadButtonDown(0) && this.isOnPlatform) {
         this.isGamepadJump = true;
         this.startJump();
+      }
+      if (input.isGamepadButtonDown(1) && !this.isDashing && this.canDash) {
+        this.isGamepadDash = true;
+        this.isDashing = true;
+        this.dashTimer = this.dashDuration;
+      }
+      if (input.isGamepadButtonDown(2)) {
+        const physics = this.getComponent(Physics); // Get physics component
+        physics.velocity.y += this.fastFallSpeed; // Increase vertical velocity
       }
     }
   }

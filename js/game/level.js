@@ -19,7 +19,6 @@ class Level extends Game {
     // Create player2 and add it to the game
     const player2 = new Player(this.canvas.width / 2 + 50, this.canvas.height / 2 - 25);
     player2.id = 'player2'; // Assign an id to distinguish between players
-    this.addGameObject(player2);
 
     // Add the player UI objects to the game
     this.addGameObject(new PlayerUI(10, 10, player1));
