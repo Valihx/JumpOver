@@ -30,8 +30,9 @@ class Player extends GameObject {
     this.dashTimer = 0;
     this.canDash = true; 
     this.fastFallSpeed = 65; 
-    this.walkSpeed = 200; // Adjust this value as needed
-
+    this.walkSpeed = 200; 
+    this.dashCooldown = 1.5; 
+    this.dashCooldownTimer = 0;
   }
 
   update(deltaTime) {
@@ -46,13 +47,23 @@ class Player extends GameObject {
         this.isDashing = false;
         this.isGamepadDash = false;
         this.dashTimer = this.dashDuration;
-        this.canDash = false; // Player can't dash again until they touch the ground
+        this.canDash = false; // Player can't dash again until cooldown is over
+        this.dashCooldownTimer = this.dashCooldown; // Start the cooldown
       }
     }
-    if (this.isOnPlatform) {
-      this.canDash = true; // Player can dash again
+
+    // Handle dash cooldown
+    if (this.dashCooldownTimer > 0) {
+      this.dashCooldownTimer -= deltaTime;
+      if (this.dashCooldownTimer <= 0) {
+        this.canDash = true; // Player can dash again
+      }
     }
 
+    // Only allow dashing again if player is on the platform and cooldown is over
+    if (this.isOnPlatform && this.dashCooldownTimer <= 0) {
+      this.canDash = true; // Player can dash again
+    }
     if (this.isDashing) {
       physics.velocity.x = this.direction * this.dashSpeed;
       this.dashTimer -= deltaTime;
