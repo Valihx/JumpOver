@@ -1,6 +1,7 @@
 const Images = {
   player1: new Image(), 
   player2: new Image(), 
+  background: new Image()
 };
 
 const AudioFiles = {
@@ -12,9 +13,8 @@ const AudioFiles = {
   background: './resources/audio/background.MP3'
 };
 
-// Set the source of the player image.
 Images.player1.src = './resources/images/player1.png'; 
-// Set the source of the player2 image.
 Images.player2.src = './resources/images/player2.png'; 
+Images.background.src = './resources/images/background.JPG';
 
 export { Images, AudioFiles };

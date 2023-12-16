@@ -5,7 +5,7 @@ import Player2 from './player2.js';
 import PlayerUI from './playerUI.js';
 import Platform from './platform.js';
 import Collectible from './collectible.js';
-import { AudioFiles } from '../engine/resources.js';
+import { Images,AudioFiles } from '../engine/resources.js';
 
 // Define a class Level that extends the Game class from the engine
 class Level extends Game {
@@ -52,15 +52,12 @@ class Level extends Game {
       this.addGameObject(platform);
     }
 
-    // Calculate the position of the collectible
-    const x = this.canvas.width / 2;
-    const y = this.canvas.height / 2;
-
     // Create a collectible and add it to the game
-    this.addGameObject(new Collectible(x, y, 20, 20));
+    const collectible = new Collectible(100, 100, 50, 50, Images.collectible);
+    this.addGameObject(collectible);
   }
-  
 }
+
 
 // Export the Level class as the default export of this module
 export default Level;

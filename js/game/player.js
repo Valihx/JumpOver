@@ -33,15 +33,14 @@ class Player extends GameObject {
     this.walkSpeed = 200; 
     this.dashCooldown = 1.5; 
     this.dashCooldownTimer = 0;
+    
 
-    document.addEventListener('click', function initAudio() {
+    document.addEventListener('click', () => {
       // Play and immediately pause all audio
       this.jumpSound.play();
       this.jumpSound.pause();
       this.dashSound.play();
       this.dashSound.pause();
-      this.runSound.play();
-      this.runSound.pause();
       this.backgroundMusic.play();
       this.backgroundMusic.pause();
     
@@ -51,13 +50,13 @@ class Player extends GameObject {
 
     this.jumpSound = new Audio(AudioFiles.jump);
     this.dashSound = new Audio(AudioFiles.dash);
-    this.runSound = new Audio(AudioFiles.run);
-    this.runSound.loop = false;
   }
 
   update(deltaTime) {
     const physics = this.getComponent(Physics); 
     const input = this.getComponent(Input); 
+    const gamepad = navigator.getGamepads()[0];
+
 
     this.handleGamepadInput(input);
     // Handle player dashing
