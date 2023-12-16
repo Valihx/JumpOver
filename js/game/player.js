@@ -1,33 +1,26 @@
-// Importing necessary components and resources
 import GameObject from '../engine/gameobject.js';
 import Renderer from '../engine/renderer.js';
 import Physics from '../engine/physics.js';
 import Input from '../engine/input.js';
 import { Images } from '../engine/resources.js';
-import Enemy from './enemy.js';
 import Platform from './platform.js';
 import Collectible from './collectible.js';
 import ParticleSystem from '../engine/particleSystem.js';
 
-// Defining a class Player that extends GameObject
 class Player extends GameObject {
-  // Constructor initializes the game object and add necessary components
   constructor(x, y) {
-    super(x, y); // Call parent's constructor
-    this.renderer = new Renderer('blue', 50, 50, Images.player1); // Add renderer
+    super(x, y); 
+    this.renderer = new Renderer('blue', 50, 50, Images.player1); 
     this.addComponent(this.renderer);
-    this.addComponent(new Physics({ x: 0, y: 0 }, { x: 0, y: 0 })); // Add physics
-    this.addComponent(new Input()); // Add input for handling user input
-    // Initialize all the player specific properties
+    this.addComponent(new Physics({ x: 0, y: 0 }, { x: 0, y: 0 })); 
+    this.addComponent(new Input());
     this.direction = 1;
-    this.lives = 3;
     this.score = 0;
     this.isOnPlatform = false;
     this.isJumping = false;
-    this.jumpForce = 400;
-    this.jumpTime = 0.3;
+    this.jumpForce = 500;
+    this.jumpTime = 0.01;
     this.jumpTimer = 0;
-    this.isInvulnerable = false;
     this.isGamepadMovement = false;
     this.isGamepadJump = false;
   }
@@ -40,15 +33,15 @@ class Player extends GameObject {
     this.handleGamepadInput(input);
     
     // Handle player movement
-if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
-  physics.velocity.x = 100;
-  this.direction = 1; // Change direction to 1
-} else if (!this.isGamepadMovement && input.isKeyDown('ArrowLeft')) {
-  physics.velocity.x = -100;
-  this.direction = -1; // Change direction to -1
-} else if (!this.isGamepadMovement) {
-  physics.velocity.x = 0;
-}
+    if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
+      physics.velocity.x = 100;
+      this.direction = 1; // Change direction to 1
+    } else if (!this.isGamepadMovement && input.isKeyDown('ArrowLeft')) {
+      physics.velocity.x = -100;
+      this.direction = -1; // Change direction to -1
+    } else if (!this.isGamepadMovement) {
+      physics.velocity.x = 0;
+    }
 
     // Handle player jumping
     if (!this.isGamepadJump && input.isKeyDown('ArrowUp') && this.isOnPlatform) {
@@ -67,15 +60,6 @@ if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
         this.game.removeGameObject(collectible);
       }
     }
-  
-    // Handle collisions with enemies
-    const enemies = this.game.gameObjects.filter((obj) => obj instanceof Enemy);
-    for (const enemy of enemies) {
-      if (physics.isColliding(enemy.getComponent(Physics))) {
-        this.collidedWithEnemy();
-      }
-    }
-  
     // Handle collisions with platforms
     this.isOnPlatform = false;  // Reset this before checking collisions with platforms
     const platforms = this.game.gameObjects.filter((obj) => obj instanceof Platform);
@@ -93,17 +77,6 @@ if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
     // Check if player has fallen off the bottom of the screen
     if (this.y > this.game.canvas.height) {
       this.resetPlayerState();
-    }
-
-    // Check if player has no lives left
-    if (this.lives <= 0) {
-      location.reload();
-    }
-
-    // Check if player has collected all collectibles
-    if (this.score >= 3) {
-      console.log('You win!');
-      location.reload();
     }
 
     super.update(deltaTime);
@@ -156,17 +129,6 @@ if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
       this.isJumping = false;
     }
   }
-
-  collidedWithEnemy() {
-    if (!this.isInvulnerable) {
-      this.lives--;
-      this.isInvulnerable = true;
-      setTimeout(() => {
-        this.isInvulnerable = false;
-      }, 2000);
-    }
-  }
-
   collect(collectible) {
     this.score += collectible.value;
     console.log(`Score: ${this.score}`);
@@ -179,21 +141,18 @@ if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
   }
 
   resetPlayerState() {
-    this.x = this.game.canvas.width / 2;
-    this.y = this.game.canvas.height / 2;
+    const platformHeight = 50; // Replace with your platform's height
+    //this.x = 0; // For left corner
+     this.x = this.game.canvas.width - this.width; // For right corner
+    this.y = this.game.canvas.height - platformHeight - this.height;
     this.getComponent(Physics).velocity = { x: 0, y: 0 };
     this.getComponent(Physics).acceleration = { x: 0, y: 0 };
     this.direction = 1;
-    this.isOnPlatform = false;
+    this.isOnPlatform = true;
     this.isJumping = false;
     this.jumpTimer = 0;
   }
 
-  resetGame() {
-    this.lives = 3;
-    this.score = 0;
-    this.resetPlayerState();
-  }
 }
 
 export default Player;

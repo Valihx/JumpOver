@@ -1,7 +1,7 @@
 // Import necessary classes and resources
 import Game from '../engine/game.js';
 import Player from './player.js';
-import Enemy from './enemy.js';
+import Player2 from './player2.js';
 import PlayerUI from './playerUI.js';
 import Platform from './platform.js';
 import Collectible from './collectible.js';
@@ -17,7 +17,6 @@ class Level extends Game {
     // Create a player object and add it to the game
     const player = new Player(this.canvas.width / 2 - 25, this.canvas.height / 2 - 25);
     this.addGameObject(player);
-    
     // Add the player UI object to the game
     this.addGameObject(new PlayerUI(10, 10));
 
@@ -36,15 +35,9 @@ class Level extends Game {
       this.addGameObject(platform);
     }
 
-    // Create enemies and add them to the game
-    this.addGameObject(new Enemy(50, this.canvas.height - 90));
-    this.addGameObject(new Enemy(platformWidth + gap + 50, this.canvas.height - 90));
-    this.addGameObject(new Enemy(2 * (platformWidth + gap) + 50, this.canvas.height - 90));
-
     // Create collectibles and add them to the game
     this.addGameObject(new Collectible(250, this.canvas.height - 100, 20, 20));
-    this.addGameObject(new Collectible(450, this.canvas.height - 100, 20, 20));
-    this.addGameObject(new Collectible(650, this.canvas.height - 100, 20, 20));
+    
   }
   
 }
