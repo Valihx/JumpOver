@@ -7,36 +7,9 @@ class Input extends Component {
   constructor() {
     // Call the constructor of the parent class (Component).
     super();
-    // An object to store the state of each key. The keys are the keyboard key codes, and the values are boolean indicating whether the key is down.
-    this.keys = {};
     // The index of the gamepad that this input component is listening to.
     this.gamepadIndex = null;
-
-    // Add event listeners for the keydown and keyup events.
-    // When a keydown event is fired, the corresponding key in the keys object is set to true.
-    // When a keyup event is fired, the corresponding key in the keys object is set to false.
-    document.addEventListener('keydown', (event) => (this.keys[event.code] = true));
-    document.addEventListener('keyup', (event) => (this.keys[event.code] = false));
-
-    // Add event listeners for the gamepadconnected and gamepaddisconnected events.
-    // When a gamepadconnected event is fired, the gamepadIndex property is set to the index of the connected gamepad.
-    // When a gamepaddisconnected event is fired, the gamepadIndex property is set to null.
-    window.addEventListener('gamepadconnected', (event) => {
-      console.log('Gamepad connected:', event.gamepad);
-      this.gamepadIndex = event.gamepad.index;
-    });
-    window.addEventListener('gamepaddisconnected', (event) => {
-      console.log('Gamepad disconnected:', event.gamepad);
-      this.gamepadIndex = null;
-    });
   }
-
-  // This method checks if a particular key is down.
-  isKeyDown(key) {
-    // If the key is in the keys object and its value is true, return true. Otherwise, return false.
-    return this.keys[key] || false;
-  }
-
   // This method returns the current state of the gamepad this input component is listening to, or null if there is no such gamepad.
   getGamepad() {
     // If a gamepad index has been set...
@@ -60,6 +33,32 @@ class Input extends Component {
     }
     return false;
   }
+
+  get isJumping() {
+    // Button 1 on the gamepad is the jump button
+    return this.isGamepadButtonDown(1);
+  }
+  get isDashing() {
+    // Button 2 on the gamepad is the dash button
+    return this.isGamepadButtonDown(2);
+  }
+  get goingDown(){
+    //Burron 3 on the gamepad will make the player go down faster :D
+    return this.isGamepadButtonDown(3);
+  }
+  get isMovingRight() {
+    // The horizontal axis of the left stick on the gamepad controls left/right movement
+    // Positive values indicate movement to the right
+    const gamepad = this.getGamepad();
+    return gamepad && gamepad.axes[0] > 0.1;
+  }
+  get isMovingLeft() {
+    // The horizontal axis of the left stick on the gamepad controls left/right movement
+    // Negative values indicate movement to the left
+    const gamepad = this.getGamepad();
+    return gamepad && gamepad.axes[0] < -0.1;
+  }
+
 }
 
 // The Input class is then exported as the default export of this module.

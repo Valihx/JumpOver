@@ -8,8 +8,9 @@ import Collectible from './collectible.js';
 import ParticleSystem from '../engine/particleSystem.js';
 
 class Player extends GameObject {
-  constructor(x, y) {
+  constructor(x, y,controller) {
     super(x, y); 
+    this.controller = controller;
     this.renderer = new Renderer('blue', 50, 50, Images.player1); 
     this.addComponent(this.renderer);
     this.addComponent(new Physics({ x: 0, y: 0 }, { x: 0, y: 0 })); 
@@ -55,22 +56,16 @@ class Player extends GameObject {
   update(deltaTime) {
     const physics = this.getComponent(Physics); 
     const input = this.getComponent(Input); 
-    const gamepad = navigator.getGamepads()[0];
-
-
-    this.handleGamepadInput(input);
+    
     // Handle player dashing
     if (this.isDashing && this.canDash) { 
-      this.dashSound.play(); // Play the dash sound at the start of the dash
-      this.dashTimer -= deltaTime;
-      if (this.dashTimer <= 0) {
-        this.isDashing = false;
-        this.isGamepadDash = false;
-        this.dashTimer = this.dashDuration;
-        this.canDash = false; // Player can't dash again until cooldown is over
-        this.dashCooldownTimer = this.dashCooldown; // Start the cooldown
-      }
+      this.dash();
     }
+
+    this.handleJumping(deltaTime);
+
+    this.handleGoDownFaster();
+
 
     // Handle dash cooldown
     if (this.dashCooldownTimer > 0) {
@@ -84,36 +79,14 @@ class Player extends GameObject {
     if (this.isOnPlatform && this.dashCooldownTimer <= 0) {
       this.canDash = true; // Player can dash again
     }
+
     if (this.isDashing) {
       physics.velocity.x = this.direction * this.dashSpeed;
       this.dashTimer -= deltaTime;
       if (this.dashTimer <= 0) {
         this.isDashing = false;
       }
-    } else {
-    
-    // Handle player movement
-    if (!this.isGamepadMovement && input.isKeyDown('ArrowRight')) {
-      physics.velocity.x = 100;
-      this.direction = 1; // Change direction to 1
-    } else if (!this.isGamepadMovement && input.isKeyDown('ArrowLeft')) {
-      physics.velocity.x = -100;
-      this.direction = -1; // Change direction to -1
-    } else if (!this.isGamepadMovement) {
-      physics.velocity.x = 0;
     }
-  }
-
-    // Handle player jumping
-    if (!this.isGamepadJump && input.isKeyDown('ArrowUp') && this.isOnPlatform) {
-      this.startJump();
-    }
-
-    if (this.isJumping) {
-      this.jumpSound.play();
-      this.updateJump(deltaTime);
-    }
-
     // Handle collisions with collectibles
     const collectibles = this.game.gameObjects.filter((obj) => obj instanceof Collectible);
     for (const collectible of collectibles) {
@@ -147,6 +120,8 @@ class Player extends GameObject {
       // Reset the gamepad flags
       this.isGamepadMovement = false;
       this.isGamepadJump = false;
+      this.isGamepadDash = false;
+      thisl.isGamepadDown = false;
 
       // Handle movement
       const horizontalAxis = gamepad.axes[0];
@@ -181,6 +156,38 @@ class Player extends GameObject {
     }
   }
 
+
+  dash() {
+    this.dashSound.play(); // Play the dash sound at the start of the dash
+    this.dashTimer -= deltaTime;
+    if (this.dashTimer <= 0) {
+      this.isDashing = false;
+      this.isGamepadDash = false;
+      this.dashTimer = this.dashDuration;
+      this.canDash = false; // Player can't dash again until cooldown is over
+      this.dashCooldownTimer = this.dashCooldown; // Start the cooldown
+    }
+  }
+  handleJumping(deltaTime){
+    const input = this.getComponent(Input); // Get the input component
+
+        if (input.isJumping && this.isOnPlatform) {
+          this.startJump();
+        }
+
+        if (this.isJumping) {
+          this.jumpSound.play();
+          this.updateJump(deltaTime);
+        }
+  }
+
+  handleGoDownFaster() {
+    const input = this.getComponent(Input);
+  
+    if (input.goingDown && !this.isOnPlatform) {
+      this.goDownFaster();
+    }
+  }
   startJump() {
     if (this.isOnPlatform) { 
       this.isJumping = true;

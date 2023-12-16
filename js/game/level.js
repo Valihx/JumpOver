@@ -6,6 +6,7 @@ import PlayerUI from './playerUI.js';
 import Platform from './platform.js';
 import Collectible from './collectible.js';
 import { Images,AudioFiles } from '../engine/resources.js';
+import Input from '../engine/input.js';
 
 // Define a class Level that extends the Game class from the engine
 class Level extends Game {
@@ -31,8 +32,10 @@ class Level extends Game {
     const playerHeight = 100; // Replace this with the actual height of the player
     const py = this.canvas.height + 200 - playerHeight;
 
-    // Create the player and add it to the game
-    const player1 = new Player(px, py);
+    // Create the first player and add it to the game
+    const player1Controller = new Input();
+    player1Controller.gamepadIndex = 0; // Set to the index of player 1's gamepad
+    const player1 = new Player(px, py, player1Controller);
     this.addGameObject(player1);
 
     // Add the player UI objects to the game
