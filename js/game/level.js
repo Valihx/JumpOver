@@ -5,25 +5,38 @@ import Player2 from './player2.js';
 import PlayerUI from './playerUI.js';
 import Platform from './platform.js';
 import Collectible from './collectible.js';
+import { AudioFiles } from '../engine/resources.js';
 
 // Define a class Level that extends the Game class from the engine
 class Level extends Game {
   constructor(canvasId) {
     super(canvasId);
 
-    // Create player1 and add it to the game
-    const player1 = new Player(this.canvas.width / 2 - 50, this.canvas.height / 2 - 25);
-    player1.id = 'player1'; // Assign an id to distinguish between players
-    this.addGameObject(player1);
+    document.addEventListener('click', function initAudio() {
+      // Play and immediately pause all audio
+      this.backgroundMusic.play();
+      this.backgroundMusic.pause();
+      // Remove the event listener so this only happens once
+      document.removeEventListener('click', initAudio);
+    });
 
-    // Create player2 and add it to the game
-    const player2 = new Player(this.canvas.width / 2 + 50, this.canvas.height / 2 - 25);
-    player2.id = 'player2'; // Assign an id to distinguish between players
+    this.backgroundMusic = new Audio(AudioFiles.background);
+    this.backgroundMusic.loop = true; // Make the music loop
+    this.backgroundMusic.volume = 0.2; // Adjust the volume if necessary
+    this.backgroundMusic.play(); // Start playing the music
+
+
+    // Calculate the spawn position of the player
+    const px = this.canvas.width * 0.55;
+    const playerHeight = 100; // Replace this with the actual height of the player
+    const py = this.canvas.height + 200 - playerHeight;
+
+    // Create the player and add it to the game
+    const player1 = new Player(px, py);
+    this.addGameObject(player1);
 
     // Add the player UI objects to the game
     this.addGameObject(new PlayerUI(10, 10, player1));
-    this.addGameObject(new PlayerUI(this.canvas.width - 100, 10, player2)); // Adjust x as needed
-
     // Set the game's camera target to player1
     this.camera.target = player1;
 
@@ -39,9 +52,12 @@ class Level extends Game {
       this.addGameObject(platform);
     }
 
-    // Create collectibles and add them to the game
-    this.addGameObject(new Collectible(250, this.canvas.height - 100, 20, 20));
-    
+    // Calculate the position of the collectible
+    const x = this.canvas.width / 2;
+    const y = this.canvas.height / 2;
+
+    // Create a collectible and add it to the game
+    this.addGameObject(new Collectible(x, y, 20, 20));
   }
   
 }

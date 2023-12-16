@@ -2,7 +2,7 @@ import GameObject from '../engine/gameobject.js';
 import Renderer from '../engine/renderer.js';
 import Physics from '../engine/physics.js';
 import Input from '../engine/input.js';
-import { Images } from '../engine/resources.js';
+import { Images, AudioFiles } from '../engine/resources.js';
 import Platform from './platform.js';
 import Collectible from './collectible.js';
 import ParticleSystem from '../engine/particleSystem.js';
@@ -25,7 +25,7 @@ class Player extends GameObject {
     this.isGamepadJump = false;
     this.isgamepadDash = false;
     this.isDashing = false;
-    this.dashSpeed = 750;
+    this.dashSpeed = 850;
     this.dashDuration = 0.5;
     this.dashTimer = 0;
     this.canDash = true; 
@@ -33,6 +33,26 @@ class Player extends GameObject {
     this.walkSpeed = 200; 
     this.dashCooldown = 1.5; 
     this.dashCooldownTimer = 0;
+
+    document.addEventListener('click', function initAudio() {
+      // Play and immediately pause all audio
+      this.jumpSound.play();
+      this.jumpSound.pause();
+      this.dashSound.play();
+      this.dashSound.pause();
+      this.runSound.play();
+      this.runSound.pause();
+      this.backgroundMusic.play();
+      this.backgroundMusic.pause();
+    
+      // Remove the event listener so this only happens once
+      document.removeEventListener('click', initAudio);
+    });
+
+    this.jumpSound = new Audio(AudioFiles.jump);
+    this.dashSound = new Audio(AudioFiles.dash);
+    this.runSound = new Audio(AudioFiles.run);
+    this.runSound.loop = false;
   }
 
   update(deltaTime) {
@@ -42,6 +62,7 @@ class Player extends GameObject {
     this.handleGamepadInput(input);
     // Handle player dashing
     if (this.isDashing && this.canDash) { 
+      this.dashSound.play(); // Play the dash sound at the start of the dash
       this.dashTimer -= deltaTime;
       if (this.dashTimer <= 0) {
         this.isDashing = false;
@@ -90,6 +111,7 @@ class Player extends GameObject {
     }
 
     if (this.isJumping) {
+      this.jumpSound.play();
       this.updateJump(deltaTime);
     }
 
