@@ -6,9 +6,8 @@ class Input extends Component {
     this.keys = {};
     this.gamepadIndex = null;
 
-    document.addEventListener('keydown', (event) => (this.keys[event.code] = true));
-    document.addEventListener('keyup', (event) => (this.keys[event.code] = false));
-    
+    /*document.addEventListener('keydown', (event) => (this.keys[event.code] = true));
+    document.addEventListener('keyup', (event) => (this.keys[event.code] = false));*/
 
     window.addEventListener('gamepadconnected', (event) => {
       this.gamepadIndex = event.gamepad.index;
@@ -18,8 +17,24 @@ class Input extends Component {
     });
   }
 
-  isKeyDown(key) {
+  /*isKeyDown(key) {
     return this.keys[key] || false;
+  }*/
+
+  getGamepad() {
+    if (this.gamepadIndex !== null) {
+      const gamepads = navigator.getGamepads();
+      return gamepads[this.gamepadIndex];
+    }
+    return null;
+  }
+
+  isGamepadButtonDown(buttonIndex) {
+    const gamepad = this.getGamepad();
+    if (gamepad && gamepad.buttons[buttonIndex]) {
+      return gamepad.buttons[buttonIndex].pressed;
+    }
+    return false;
   }
 }
 
