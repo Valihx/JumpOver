@@ -6,6 +6,7 @@ import { Images, AudioFiles } from '../engine/resources.js';
 import Platform from './platform.js';
 import Collectible from './collectible.js';
 import ParticleSystem from '../engine/particleSystem.js';
+import Player2 from './player2.js';
 
 class Player extends GameObject {
   constructor(x, y,name) {
@@ -72,7 +73,7 @@ class Player extends GameObject {
         this.dashCooldownTimer = this.dashCooldown; // Start the cooldown
       }
     }
-
+    
     // Handle dash cooldown
     if (this.dashCooldownTimer > 0) {
       this.dashCooldownTimer -= deltaTime;
@@ -122,7 +123,21 @@ class Player extends GameObject {
         }
       }
     }
-
+    // Handle collisions with the other player
+    const otherPlayer = this.game.gameObjects.find((obj) => obj instanceof Player2 && obj !== this);
+    if (otherPlayer) {
+      const player1Physics = this.getComponent(Physics);
+      const player2Physics = otherPlayer.getComponent(Physics);
+      if (player1Physics.isColliding(player2Physics)) {
+        console.log("colliding");
+        // Check if this player is directly above the other player
+        if (this.y + this.renderer.height+20 >= otherPlayer.y) {
+          // Allow this player to jump again
+          this.isOnPlatform = true;
+          this.isJumping = false;
+        }
+      }
+    }
     
     super.update(deltaTime);
   }
@@ -197,8 +212,7 @@ class Player extends GameObject {
   }
 
   resetPlayerState() {
-    const platformHeight = 50; // Replace with your platform's height
-    this.y = this.game.canvas.height - platformHeight - this.height;
+    this.y = this.game.canvas.height - this.height;
     this.getComponent(Physics).velocity = { x: 0, y: 0 };
     this.getComponent(Physics).acceleration = { x: 0, y: 0 };
     this.direction = 1;
@@ -206,7 +220,6 @@ class Player extends GameObject {
     this.isJumping = false;
     this.jumpTimer = 0;
   }
-
 }
 
 export default Player;

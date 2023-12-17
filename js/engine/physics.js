@@ -45,7 +45,10 @@ class Physics extends Component {
 
     // Return the bounding box.
     return [left, right, top, bottom];
+    
+    
   }
+  
 }
 
 // The Physics class is then exported as the default export of this module.
