@@ -19,7 +19,7 @@ class PlayerUI extends GameObject {
   // The update method is called every frame.
   update(deltaTime) {
     // Update the text of the UI component to reflect the player's current score.
-    this.uiComponent.setText(`${this.player.id} Score: ${this.player.score}`);
+    this.uiComponent.setText(`${this.player.name} Score: ${this.player.score}`);
   }
 }
 export default PlayerUI;

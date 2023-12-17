@@ -7,6 +7,7 @@ import Platform from './platform.js';
 import Collectible from './collectible.js';
 import { Images,AudioFiles } from '../engine/resources.js';
 
+
 // Define a class Level that extends the Game class from the engine
 class Level extends Game {
   constructor(canvasId) {
@@ -32,7 +33,7 @@ class Level extends Game {
     const py = this.canvas.height + 200 - playerHeight;
 
     // Create the player and add it to the game
-    const player1 = new Player(px, py);
+    const player1 = new Player(px, py,"Player 1");
     this.addGameObject(player1);
 
     // Calculate the spawn position of the second player
@@ -41,7 +42,7 @@ class Level extends Game {
     const py2 = this.canvas.height + 200 - playerHeight2;
 
     // Create the second player and add it to the game
-    const player2 = new Player2(px2, py2);
+    const player2 = new Player2(px2, py2,"Player 2");
     this.addGameObject(player2);
 
     // Add the second player UI objects to the game
@@ -65,11 +66,8 @@ class Level extends Game {
     }
 
     // Create a collectible and add it to the game
-    const collectible = new Collectible(100, 100, 50, 50, Images.collectible);
-    this.addGameObject(collectible);
+    this.addGameObject(new Collectible(1375, this.canvas.height+60 - 100, 20, 20));
   }
 }
-
-
 // Export the Level class as the default export of this module
 export default Level;

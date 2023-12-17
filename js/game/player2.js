@@ -8,8 +8,9 @@ import Collectible from './collectible.js';
 import ParticleSystem from '../engine/particleSystem.js';
 
 class Player2 extends GameObject {
-  constructor(x, y) {
+  constructor(x, y,name) {
     super(x, y); 
+    this.name=name;
     this.renderer = new Renderer('red', 50, 50, Images.player2); 
     this.addComponent(this.renderer);
     this.addComponent(new Physics({ x: 0, y: 0 }, { x: 0, y: 0 })); 
@@ -29,7 +30,7 @@ class Player2 extends GameObject {
     this.dashDuration = 0.5;
     this.dashTimer = 0;
     this.canDash = true; 
-    this.fastFallSpeed = 65; 
+    this.fastFallSpeed = 45; 
     this.walkSpeed = 200; 
     this.dashCooldown = 1.5; 
     this.dashCooldownTimer = 0;
