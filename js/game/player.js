@@ -107,7 +107,6 @@ class Player extends GameObject {
     for (const collectible of collectibles) {
       if (physics.isColliding(collectible.getComponent(Physics))) {
         this.collect(collectible);
-        this.game.removeGameObject(collectible);
       }
     }
     // Handle collisions with platforms
@@ -188,6 +187,8 @@ class Player extends GameObject {
     this.score += collectible.value;
     console.log(`Score: ${this.score}`);
     this.emitCollectParticles(collectible);
+    this.resetPlayerState()
+    collectible.respawn();
   }
 
   emitCollectParticles() {

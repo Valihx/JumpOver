@@ -24,5 +24,11 @@ class Collectible extends GameObject {
       this.direction = 1;
     }
   }
+  respawn() {
+    // Create a new collectible at a random location within the specified range
+    const newCollectible = new Collectible(Math.random() * (1700 - 1200) + 1200, 1375, /* other parameters */);
+    // Add the new collectible to the game
+    this.game.addGameObject(newCollectible);
+  }
 }
 export default Collectible;

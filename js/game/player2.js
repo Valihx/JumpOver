@@ -127,7 +127,6 @@ if (this.isDashing) {
     for (const collectible of collectibles) {
       if (physics.isColliding(collectible.getComponent(Physics))) {
         this.collect(collectible);
-        this.game.removeGameObject(collectible);
       }
     }
     // Handle collisions with platforms
@@ -169,6 +168,8 @@ if (this.isDashing) {
     this.score += collectible.value;
     console.log(`Score: ${this.score}`);
     this.emitCollectParticles(collectible);
+    this.resetPlayerState()
+    collectible.respawn();
   }
 
   emitCollectParticles() {
