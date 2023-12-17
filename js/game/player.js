@@ -46,7 +46,6 @@ class Player extends GameObject {
       this.backgroundMusic.play();
       this.backgroundMusic.pause();
     
-      // Remove the event listener so this only happens once
       document.removeEventListener('click', initAudio);
     });
 
@@ -63,29 +62,25 @@ class Player extends GameObject {
     this.handleGamepadInput(input);
     // Handle player dashing
     if (this.isDashing && this.canDash) { 
-      this.dashSound.play(); // Play the dash sound at the start of the dash
+      this.dashSound.play();
       this.dashTimer -= deltaTime;
       if (this.dashTimer <= 0) {
         this.isDashing = false;
         this.isGamepadDash = false;
         this.dashTimer = this.dashDuration;
-        this.canDash = false; // Player can't dash again until cooldown is over
-        this.dashCooldownTimer = this.dashCooldown; // Start the cooldown
-      }
-    }
-    
-    // Handle dash cooldown
-    if (this.dashCooldownTimer > 0) {
-      this.dashCooldownTimer -= deltaTime;
-      if (this.dashCooldownTimer <= 0) {
-        this.canDash = true; // Player can dash again
+        this.canDash = false;
+        this.dashCooldownTimer = this.dashCooldown; 
       }
     }
 
-    // Only allow dashing again if player is on the platform and cooldown is over
-    if (this.isOnPlatform && this.dashCooldownTimer <= 0) {
-      this.canDash = true; // Player can dash again
+    // Handle dash coldown
+    if (this.dashCooldownTimer > 0) {
+      this.dashCooldownTimer -= deltaTime;
+      if (this.dashCooldownTimer <= 0) {
+        this.canDash = true;
+      }
     }
+    //dash cd
     if (this.isDashing) {
       physics.velocity.x = this.direction * this.dashSpeed;
       this.dashTimer -= deltaTime;
@@ -93,10 +88,10 @@ class Player extends GameObject {
         this.isDashing = false;
       }
     } 
-
+    //Handle player jump
     if (this.isGamepadJump && this.isOnPlatform) {
       this.startJump();
-      this.isGamepadJump = false; // Reset the jump flag
+      this.isGamepadJump = false;
     }
     if (this.isJumping) {
       this.jumpSound.play();
@@ -152,17 +147,15 @@ class Player extends GameObject {
 
       // Handle movement
       const horizontalAxis = gamepad.axes[0];
-      // Move right
       if (horizontalAxis > 0.1) {
         this.isGamepadMovement = true;
         physics.velocity.x = 300;
-        this.direction = 1; // Change direction to 1
+        this.direction = 1; 
       } 
-      // Move left
       else if (horizontalAxis < -0.1) {
         this.isGamepadMovement = true;
         physics.velocity.x = -300;
-        this.direction = -1; // Change direction to -1
+        this.direction = -1; 
       } 
       else {
         physics.velocity.x = 0;
@@ -177,8 +170,8 @@ class Player extends GameObject {
         this.dashTimer = this.dashDuration;
       }
       if (input.isGamepadButtonDown(2)) {
-        const physics = this.getComponent(Physics); // Get physics component
-        physics.velocity.y += this.fastFallSpeed; // Increase vertical velocity
+        const physics = this.getComponent(Physics); 
+        physics.velocity.y += this.fastFallSpeed; 
       }
     }
   }
@@ -213,7 +206,6 @@ class Player extends GameObject {
 
   resetPlayerState() {
     // Set the player's position to the spawn point
-    for (const player of this.game.players) {
       this.x = this.spawnPoint.x;
       this.y = this.spawnPoint.y;
       this.getComponent(Physics).velocity = { x: 0, y: 0 };
@@ -222,7 +214,6 @@ class Player extends GameObject {
       this.isOnPlatform = true;
       this.isJumping = false;
       this.jumpTimer = 0;
-    }
   }
 }
 
