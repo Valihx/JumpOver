@@ -46,7 +46,7 @@ class Level extends Game {
     this.addGameObject(player2);
 
     // Add the second player UI objects to the game
-    this.addGameObject(new PlayerUI(10, 30, player2)); // Adjust the UI position as necessary
+    this.addGameObject(new PlayerUI(1280, 10, player2)); // Adjust the UI position as necessary
 
     // Add the player UI objects to the game
     this.addGameObject(new PlayerUI(10, 10, player1));
