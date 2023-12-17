@@ -81,12 +81,11 @@ class Player2 extends GameObject {
 
     // Handle player dashing
     if (!this.isDashing && input.isKeyDown('KeyK') && this.canDash) { 
-      this.dashSound.play(); // Play the dash sound at the start of the dash
-      this.isDashing = true; // Set isDashing to true
-      physics.velocity.x = this.direction * 1000; // Increase the player's velocity in the direction they're facing
-      this.dashCooldownTimer = this.dashCooldown; // Start the dash cooldown
+      this.dashSound.play();
+      this.isDashing = true;
+      physics.velocity.x = this.direction * 1000; 
+      this.dashCooldownTimer = this.dashCooldown; 
     }
-    
 if (this.isDashing) {
   this.dashTimer -= deltaTime;
   if (this.dashTimer <= 0) {
@@ -95,7 +94,6 @@ if (this.isDashing) {
     physics.velocity.x = 0; // Reset the player's velocity when the dash ends
   }
 }
-
 // Handle dash cooldown
 this.dashCooldownTimer -= deltaTime;
 if (this.dashCooldownTimer <= 0) {
