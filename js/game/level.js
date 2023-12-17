@@ -19,11 +19,11 @@ class Level extends Game {
 
     this.backgroundMusic = new Audio(AudioFiles.background);
     this.backgroundMusic.loop = true; 
-    this.backgroundMusic.volume = 0.2; 
+    this.backgroundMusic.volume = 0.05; 
     this.backgroundMusic.play(); 
 
 
-    // Calculate the spawn position of the player
+    // Calculate the  position of the player
     const px = this.canvas.width * 0.55;
     const playerHeight = 100;
     const py = this.canvas.height + 200 - playerHeight;

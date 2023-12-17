@@ -72,7 +72,6 @@ class Player extends GameObject {
         this.dashCooldownTimer = this.dashCooldown; 
       }
     }
-
     // Handle dash coldown
     if (this.dashCooldownTimer > 0) {
       this.dashCooldownTimer -= deltaTime;
