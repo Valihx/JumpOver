@@ -35,6 +35,7 @@ class Player extends GameObject {
     this.walkSpeed = 200; 
     this.dashCooldown = 1.5; 
     this.dashCooldownTimer = 0;
+    this.spawnPoint = { x: this.x, y: this.y };
     
 
     document.addEventListener('click', () => {
@@ -131,7 +132,7 @@ class Player extends GameObject {
       if (player1Physics.isColliding(player2Physics)) {
         console.log("colliding");
         // Check if this player is directly above the other player
-        if (this.y + this.renderer.height+20 >= otherPlayer.y) {
+        if (this.y + this.renderer.height >= otherPlayer.y) {
           // Allow this player to jump again
           this.isOnPlatform = true;
           this.isJumping = false;
@@ -212,7 +213,9 @@ class Player extends GameObject {
   }
 
   resetPlayerState() {
-    this.y = this.game.canvas.height - this.height;
+    // Set the player's position to the spawn point
+    this.x = this.spawnPoint.x;
+    this.y = this.spawnPoint.y;
     this.getComponent(Physics).velocity = { x: 0, y: 0 };
     this.getComponent(Physics).acceleration = { x: 0, y: 0 };
     this.direction = 1;

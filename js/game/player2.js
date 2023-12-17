@@ -31,10 +31,12 @@ class Player2 extends GameObject {
     this.dashDuration = 0.5;
     this.dashTimer = 0;
     this.canDash = true; 
-    this.fastFallSpeed = 45; 
+    this.fastFallSpeed = 50; 
     this.walkSpeed = 200; 
     this.dashCooldown = 1.5; 
     this.dashCooldownTimer = 0;
+    this.spawnPoint = { x: this.x, y: this.y };
+
     
 
     document.addEventListener('click', () => {
@@ -193,8 +195,9 @@ if (this.isDashing) {
   }
 
   resetPlayerState() {
-    const platformHeight = 50; // Replace with your platform's height
-    this.y = this.game.canvas.height - platformHeight - this.height;
+    // Set the player's position to the spawn point
+    this.x = this.spawnPoint.x;
+    this.y = this.spawnPoint.y;
     this.getComponent(Physics).velocity = { x: 0, y: 0 };
     this.getComponent(Physics).acceleration = { x: 0, y: 0 };
     this.direction = 1;
@@ -202,7 +205,6 @@ if (this.isDashing) {
     this.isJumping = false;
     this.jumpTimer = 0;
   }
-
 }
 
 export default Player2;

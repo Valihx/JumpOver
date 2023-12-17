@@ -66,8 +66,9 @@ class Level extends Game {
     }
 
     // Create a collectible and add it to the game
-    this.addGameObject(new Collectible(1375, this.canvas.height+60 - 100, 20, 20));
+    this.addGameObject(new Collectible(1375, this.canvas.height-60 - 100, 20, 20));
   }
+
 }
 // Export the Level class as the default export of this module
 export default Level;

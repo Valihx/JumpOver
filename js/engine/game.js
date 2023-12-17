@@ -64,6 +64,7 @@ class Game {
     this.gameObjects = this.gameObjects.filter(obj => !this.gameObjectsToRemove.includes(obj));
     // Clear the list of game objects to remove.
     this.gameObjectsToRemove = [];
+
     
   }
 
