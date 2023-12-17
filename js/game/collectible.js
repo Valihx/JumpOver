@@ -14,10 +14,7 @@ class Collectible extends GameObject {
 
   }
   update() {
-    // Change the x position based on the direction and speed
     this.x += this.direction * this.speed;
-
-    // If the collectible reaches the edge of the range, change the direction
     if (this.x > 1600) {
       this.direction = -1;
     } else if (this.x < 1200) {
@@ -25,9 +22,7 @@ class Collectible extends GameObject {
     }
   }
   respawn() {
-    // Create a new collectible at a random location within the specified range
-    const newCollectible = new Collectible(Math.random() * (1700 - 1200) + 1200, 1375, /* other parameters */);
-    // Add the new collectible to the game
+    const newCollectible = new Collectible(Math.random() * (1700 - 1200) + 1200, 1375,);
     this.game.addGameObject(newCollectible);
   }
 }

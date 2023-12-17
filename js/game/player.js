@@ -37,9 +37,8 @@ class Player extends GameObject {
     this.dashCooldownTimer = 0;
     this.spawnPoint = { x: this.x, y: this.y };
     
-
+    
     document.addEventListener('click', () => {
-      // Play and immediately pause all audio
       this.jumpSound.play();
       this.jumpSound.pause();
       this.dashSound.play();
@@ -214,14 +213,16 @@ class Player extends GameObject {
 
   resetPlayerState() {
     // Set the player's position to the spawn point
-    this.x = this.spawnPoint.x;
-    this.y = this.spawnPoint.y;
-    this.getComponent(Physics).velocity = { x: 0, y: 0 };
-    this.getComponent(Physics).acceleration = { x: 0, y: 0 };
-    this.direction = 1;
-    this.isOnPlatform = true;
-    this.isJumping = false;
-    this.jumpTimer = 0;
+    for (const player of this.game.players) {
+      this.x = this.spawnPoint.x;
+      this.y = this.spawnPoint.y;
+      this.getComponent(Physics).velocity = { x: 0, y: 0 };
+      this.getComponent(Physics).acceleration = { x: 0, y: 0 };
+      this.direction = 1;
+      this.isOnPlatform = true;
+      this.isJumping = false;
+      this.jumpTimer = 0;
+    }
   }
 }
 
